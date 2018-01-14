@@ -1,2 +1,9 @@
 # ethereal
-Fresh Ethereum networks on kubernetes
+
+Dockerized Ethereum testnets
+
+- - -
+
+## Requirements
+
+
