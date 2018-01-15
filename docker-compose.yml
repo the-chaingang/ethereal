@@ -1,0 +1,36 @@
+version: '2.1'
+services:
+  bootnode:
+    image: chaingang/ethereal:v0.3
+    command: ["--verbosity", "8"]
+    environment:
+      - TARGET=bootnode
+    networks:
+      ethnet:
+        ipv4_address: 11.15.0.2
+    ports:
+      - "30301:30301"
+    volumes:
+      - shared:/opt/shared
+  node-1:
+    image: chaingang/ethereal:v0.3
+    command: ["--rpc", "--rpcport", "8545", "--port", "30303", "--networkid", "158972"]
+    networks:
+      - ethnet
+    volumes:
+      - shared:/opt/shared
+      - ./:/opt/genesis
+    depends_on:
+      - bootnode
+    environment:
+      - NODE_NAME=node-1
+      - BOOTNODE_ADDRESS=11.15.0.2
+networks:
+  ethnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 11.15.0.0/16
+          gateway: 11.15.0.1
+volumes:
+  shared:
