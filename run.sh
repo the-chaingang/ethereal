@@ -76,5 +76,5 @@ elif [ $TARGET == "fullnode" ] ; then
 	BOOTNODE_ENODE_URL="enode://${BOOTNODE_PUBLIC_KEY}@${BOOTNODE_ADDRESS}:${BOOTNODE_UDP_PORT}"
 
 	$GETH --datadir $SHARED_DIR/$NODE_NAME init $GENESIS_DIR/$GENESIS_FILE
-	$GETH --datadir $SHARED_DIR/$NODE_NAME --rpcapi "db,eth,net,web3" --rpcaddr "0.0.0.0" --bootnodes $BOOTNODE_ENODE_URL $@
+	$GETH --datadir $SHARED_DIR/$NODE_NAME --rpcaddr "0.0.0.0" --bootnodes $BOOTNODE_ENODE_URL $@
 fi
