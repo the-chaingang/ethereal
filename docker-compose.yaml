@@ -20,6 +20,8 @@ services:
     volumes:
       - shared:/opt/shared
       - ./:/opt/genesis
+    ports:
+      - "8545:8545"
     depends_on:
       - bootnode
     environment:
