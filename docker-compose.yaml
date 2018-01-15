@@ -20,6 +20,9 @@ services:
     volumes:
       - shared:/opt/shared
       - ./:/opt/genesis
+    networks:
+      ethnet:
+        ipv4_address: 11.15.0.3
     ports:
       - "8545:8545"
       - "30303:30303"
