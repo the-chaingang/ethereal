@@ -21,6 +21,13 @@ VOLUME /opt/shared
 RUN mkdir /opt/genesis
 VOLUME /opt/genesis
 
+EXPOSE 8545
+EXPOSE 8546
+EXPOSE 30301
+EXPOSE 30303
+EXPOSE 30304
+EXPOSE 6060
+
 COPY run.sh .
 
 ENV NODE_NAME=""

@@ -14,7 +14,7 @@ services:
       - shared:/opt/shared
   node-1:
     image: chaingang/ethereal:v0.3
-    command: ["--rpc", "--rpcport", "8545", "--port", "30303", "--networkid", "158972"]
+    command: ["--rpc", "--networkid", "158972"]
     networks:
       - ethnet
     volumes:
@@ -22,6 +22,7 @@ services:
       - ./:/opt/genesis
     ports:
       - "8545:8545"
+      - "30303:30303"
     depends_on:
       - bootnode
     environment:
