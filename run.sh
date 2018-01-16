@@ -56,8 +56,6 @@ elif [ $TARGET == "fullnode" ] ; then
 	fi
 	CURRENT=0
 	while true ; do
-		echo "wtf -> $SHARED_DIR, $BOOTNODE_KEY_FILE, $(ls -1 $SHARED_DIR | grep $BOOTNODE_KEY_FILE)"
-
 		if [ $CURRENT -eq $RETRIES ] ; then
 			exit 1
 		fi
