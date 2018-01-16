@@ -7,7 +7,7 @@
 version: '2.1'
 services:
   bootnode:
-    image: the-chaingang/ethereal
+    image: chaingang/ethereal
     command: ["--verbosity", "8"]
     environment:
       - TARGET=bootnode
@@ -19,7 +19,7 @@ services:
     volumes:
       - shared:/opt/shared
   node-1:
-    image: the-chaingang/ethereal
+    image: chaingang/ethereal
     command: ["--rpc", "--networkid", "${NETWORK_ID:-158972}"]
     networks:
       - ethnet
@@ -41,7 +41,7 @@ services:
       - BOOTNODE_ADDRESS=13.3.7.2
       - BOOTNODE_UDP_PORT=30301
   node-2:
-    image: the-chaingang/ethereal
+    image: chaingang/ethereal
     command: ["--rpc", "--networkid", "${NETWORK_ID:-158972}"]
     networks:
       - ethnet
