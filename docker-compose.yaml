@@ -1,42 +1,73 @@
+# Parameters:
+#   - NETWORK_ID: Defaults to 158972
+#   - GENESIS_DIR_PATH: Local path to directory containing your genesis file, defaults
+#     to directory from which you are running `docker-compose up`
+#   - GENESIS_FILE: Name of genesis file you wish to use, defaults to genesis.json
+#     (Your local path to the genesis file should be $GENESIS_DIR/$GENESIS_FILE)
 version: '2.1'
 services:
   bootnode:
-    image: chaingang/ethereal:v0.3
+    image: the-chaingang/ethereal
     command: ["--verbosity", "8"]
     environment:
       - TARGET=bootnode
     networks:
       ethnet:
-        ipv4_address: 11.15.0.2
+        ipv4_address: 13.3.7.2
     ports:
       - "30301:30301"
     volumes:
       - shared:/opt/shared
   node-1:
-    image: chaingang/ethereal:v0.3
-    command: ["--rpc", "--networkid", "158972"]
+    image: the-chaingang/ethereal
+    command: ["--rpc", "--networkid", "${NETWORK_ID:-158972}"]
     networks:
       - ethnet
     volumes:
       - shared:/opt/shared
-      - ./:/opt/genesis
+      - ${GENESIS_DIR_PATH:-./}:/opt/genesis
     networks:
       ethnet:
-        ipv4_address: 11.15.0.3
+        ipv4_address: 13.3.7.3
     ports:
       - "8545:8545"
       - "30303:30303"
     depends_on:
       - bootnode
     environment:
+      - TARGET=fullnode
+      - GENESIS_FILE=${GENESIS_FILE:-genesis.json}
       - NODE_NAME=node-1
-      - BOOTNODE_ADDRESS=11.15.0.2
+      - BOOTNODE_ADDRESS=13.3.7.2
+      - BOOTNODE_UDP_PORT=30301
+  node-2:
+    image: the-chaingang/ethereal
+    command: ["--rpc", "--networkid", "${NETWORK_ID:-158972}"]
+    networks:
+      - ethnet
+    volumes:
+      - shared:/opt/shared
+      - ${GENESIS_DIR_PATH:-./}:/opt/genesis
+    networks:
+      ethnet:
+        ipv4_address: 13.3.7.4
+    ports:
+      - "8645:8545"
+      - "31303:30303"
+    depends_on:
+      - bootnode
+    environment:
+      - TARGET=fullnode
+      - GENESIS_FILE=${GENESIS_FILE:-genesis.json}
+      - NODE_NAME=node-2
+      - BOOTNODE_ADDRESS=13.3.7.2
+      - BOOTNODE_UDP_PORT=30301
 networks:
   ethnet:
     driver: bridge
     ipam:
       config:
-        - subnet: 11.15.0.0/16
-          gateway: 11.15.0.1
+        - subnet: 13.3.7.0/16
+          gateway: 13.3.7.1
 volumes:
   shared:
