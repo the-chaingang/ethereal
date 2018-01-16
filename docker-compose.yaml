@@ -1,6 +1,8 @@
 # Parameters:
 #   - NETWORK_ID: Defaults to 158972
-#   - GENESIS_DIR_PATH: Local path to directory containing your genesis file, defaults
+#   - HOST_SHARED_DIR: Local path to directory you would like to use as the ethereal
+#   - network shared directory; if not specified, uses a docker volume
+#   - HOST_GENESIS_DIR: Local path to directory containing your genesis file, defaults
 #     to directory from which you are running `docker-compose up`
 #   - GENESIS_FILE: Name of genesis file you wish to use, defaults to genesis.json
 #     (Your local path to the genesis file should be $GENESIS_DIR/$GENESIS_FILE)
@@ -17,15 +19,15 @@ services:
     ports:
       - "30301:30301"
     volumes:
-      - shared:/opt/shared
+      - ${HOST_SHARED_DIR:-shared}:/opt/shared
   node-1:
     image: chaingang/ethereal
     command: ["--rpc", "--networkid", "${NETWORK_ID:-158972}"]
     networks:
       - ethnet
     volumes:
-      - shared:/opt/shared
-      - ${GENESIS_DIR_PATH:-./}:/opt/genesis
+      - ${HOST_SHARED_DIR:-shared}:/opt/shared
+      - ${HOST_GENESIS_DIR:-./}:/opt/genesis
     networks:
       ethnet:
         ipv4_address: 13.3.7.3
@@ -46,8 +48,8 @@ services:
     networks:
       - ethnet
     volumes:
-      - shared:/opt/shared
-      - ${GENESIS_DIR_PATH:-./}:/opt/genesis
+      - ${HOST_SHARED_DIR:-shared}:/opt/shared
+      - ${HOST_GENESIS_DIR:-./}:/opt/genesis
     networks:
       ethnet:
         ipv4_address: 13.3.7.4
