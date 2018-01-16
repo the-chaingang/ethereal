@@ -1,5 +1,9 @@
 #!/bin/bash
 
+BOOTNODE_TARGET="bootnode"
+FULLNODE_TARGET="fullnode"
+MININGNODE_TARGET="miningnode"
+
 BIN_PATH=/opt/go-ethereum/build/bin
 SHARED_DIR=/opt/shared
 GENESIS_DIR=/opt/genesis
@@ -11,14 +15,15 @@ GETH=$BIN_PATH/geth
 
 echo "Running ethereal with target: $TARGET"
 
-if [ $TARGET == "bootnode" ] ; then
+if [ $TARGET == $BOOTNODE_TARGET ] ; then
 	echo $(ls -l $SHARED_DIR)
 	if [ -z $(ls -l $SHARED_DIR| grep $BOOTNODE_KEY_FILE) ] ; then
 		$BOOTNODE -genkey $SHARED_DIR/$BOOTNODE_KEY_FILE
 	fi
 
 	$BOOTNODE -nodekey $SHARED_DIR/$BOOTNODE_KEY_FILE $@
-elif [ $TARGET == "fullnode" ] ; then
+
+elif [ $TARGET == $FULLNODE_TARGET ] || [ $TARGET == $MININGNODE_TARGET ] ; then
 	if [ -z $NODE_NAME ] ; then
 		echo "ERROR: Container run with empty NODE_NAME"
 		exit 1
@@ -45,7 +50,7 @@ elif [ $TARGET == "fullnode" ] ; then
 		exit 1
 	fi
 
-	echo "GEtting ready to POLL"
+	echo "Getting ready to POLL..."
 
 	# Wait for bootnode hash to become available
 	if [ -z $POLL_INTERVAL ] ; then
@@ -73,6 +78,27 @@ elif [ $TARGET == "fullnode" ] ; then
 	BOOTNODE_PUBLIC_KEY=$($BOOTNODE -nodekey $SHARED_DIR/$BOOTNODE_KEY_FILE -writeaddress)
 	BOOTNODE_ENODE_URL="enode://${BOOTNODE_PUBLIC_KEY}@${BOOTNODE_ADDRESS}:${BOOTNODE_UDP_PORT}"
 
+	echo "Acquired bootnode enode URL: $BOOTNODE_ENODE_URL"
+
 	$GETH --datadir $SHARED_DIR/$NODE_NAME init $GENESIS_DIR/$GENESIS_FILE
-	$GETH --datadir $SHARED_DIR/$NODE_NAME --rpcaddr "0.0.0.0" --bootnodes $BOOTNODE_ENODE_URL $@
+
+	MININGNODE_ARGS=""
+	if [ $TARGET == $MININGNODE_TARGET ] ; then
+		MININGNODE_PASSWORD="$NODE_NAME-password"
+		ACCOUNT_OUT=$($GETH --datadir $SHARED_DIR/$NODE_NAME account new --password <(echo $MININGNODE_PASSWORD))
+		ACCOUNT=$(echo $ACCOUNT_OUT | sed -e "s/Address: {\(.\+\)}/\1/")
+
+		echo "Setting geth up to mine into account: $ACCOUNT"
+
+		MININGNODE_ARGS="--mine --minerthreads $MINERTHREADS --etherbase $ACCOUNT"
+	fi
+
+	$GETH --datadir $SHARED_DIR/$NODE_NAME \
+		--rpcaddr "0.0.0.0" \
+		--bootnodes $BOOTNODE_ENODE_URL \
+		$MININGNODE_ARGS $@
+
+else
+	echo "ERROR: Invalid TARGET=$TARGET"
+	exit 1
 fi

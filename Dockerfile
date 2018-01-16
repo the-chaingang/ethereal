@@ -32,6 +32,7 @@ COPY run.sh .
 
 ENV NODE_NAME=""
 ENV GENESIS_FILE="genesis.json"
+ENV MINERTHREADS=1
 
 ENTRYPOINT ["bash", "run.sh"]
 CMD []

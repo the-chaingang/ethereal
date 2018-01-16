@@ -1,16 +1,24 @@
 # Parameters:
+# -----------
+#   - ETHEREAL_TAG: Specific tag under chaingang/ethereal you wish to deploy, defaults
+#     to "latest"
+#
 #   - NETWORK_ID: Defaults to 158972
+#
 #   - HOST_SHARED_DIR: Local path to directory you would like to use as the ethereal
-#   - network shared directory; if not specified, uses a docker volume
+#     network shared directory; if not specified, uses a docker volume
+#
 #   - HOST_GENESIS_DIR: Local path to directory containing your genesis file, defaults
-#     to directory from which you are running `docker-compose up`
+#     to directory from which you are running "docker-compose up"
+#
 #   - GENESIS_FILE: Name of genesis file you wish to use, defaults to genesis.json
 #     (Your local path to the genesis file should be $GENESIS_DIR/$GENESIS_FILE)
+
 version: '2.1'
 services:
   bootnode:
-    image: chaingang/ethereal
-    command: ["--verbosity", "8"]
+    image: chaingang/ethereal:${ETHEREAL_TAG:-latest}
+    command: ["--verbosity", "6"]
     environment:
       - TARGET=bootnode
     networks:
@@ -21,7 +29,7 @@ services:
     volumes:
       - ${HOST_SHARED_DIR:-shared}:/opt/shared
   node-1:
-    image: chaingang/ethereal
+    image: chaingang/ethereal:${ETHEREAL_TAG:-latest}
     command: ["--rpc", "--networkid", "${NETWORK_ID:-158972}"]
     networks:
       - ethnet
@@ -43,7 +51,7 @@ services:
       - BOOTNODE_ADDRESS=13.3.7.2
       - BOOTNODE_UDP_PORT=30301
   node-2:
-    image: chaingang/ethereal
+    image: chaingang/ethereal:${ETHEREAL_TAG:-latest}
     command: ["--rpc", "--networkid", "${NETWORK_ID:-158972}"]
     networks:
       - ethnet
@@ -59,7 +67,7 @@ services:
     depends_on:
       - bootnode
     environment:
-      - TARGET=fullnode
+      - TARGET=miningnode
       - GENESIS_FILE=${GENESIS_FILE:-genesis.json}
       - NODE_NAME=node-2
       - BOOTNODE_ADDRESS=13.3.7.2
