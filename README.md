@@ -28,8 +28,8 @@ build from this repository's [Dockerfile](./Dockerfile).
 
 ## Network topology and configuration
 
-Our default network consists of a single bootnode and two full nodes. For more information
-about private ethereum networks, refer to the
+Our default network consists of a single bootnode, a single full node, and a single mining node.
+For more information about private ethereum networks, refer to the
 [ethereum/go-ethereum documentation on the subject](https://github.com/ethereum/go-ethereum/wiki/Setting-up-private-network-or-local-cluster).
 
 The network is specified in [docker-compose.yaml](./docker-compose.yaml). If you would like to deploy a network with a different topology, this is the place to start.
