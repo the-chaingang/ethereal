@@ -1,5 +1,7 @@
 FROM golang:1.8-jessie
 
+ARG CHECKOUT_TARGET=master
+
 # TARGET={bootnode|fullnode|miningnode}
 ENV TARGET=fullnode
 
@@ -8,6 +10,8 @@ RUN mkdir -p /opt/go-ethereum
 RUN git clone https://github.com/ethereum/go-ethereum.git /opt/go-ethereum
 
 WORKDIR /opt/go-ethereum
+
+RUN git checkout $CHECKOUT_TARGET
 
 RUN make all
 
