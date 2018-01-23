@@ -10,10 +10,10 @@ Dockerized Ethereum testnets
 * [Network up](#network-up)
 * [Network topology and configuration](#network-topology-and-configuration)
 * [Working with nodes from docker host](#working-with-nodes-from-docker-host)
-    * [JSON-RPC access with `geth`](json-rpc-access-with--geth-)
-    * [IPC access with `geth`](ipc-access-with--geth-)
+    * [JSON-RPC access with `geth`](json-rpc-access-with-geth)
+    * [IPC access with `geth`](ipc-access-with-geth)
 * [Working with a node from its container](#working-with-a-node-from-its-container)
-    * [Example: Checking a node's `admin.peers`](example--ehecking-a-node-s--admin-peers-)
+    * [Example: Checking a node's `admin.peers`](example-checking-a-nodes-adminpeers)
 * [Building and using a specific version of Geth](#building-and-using-a-specific-version-of-geth)
 
 
