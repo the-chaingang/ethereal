@@ -4,6 +4,19 @@ Dockerized Ethereum testnets
 
 - - -
 
+## Table of Contents
+
+* [Requirements](#requirements)
+* [Network up](#network-up)
+* [Network topology and configuration](#network-topology-and-configuration)
+* [Working with nodes from docker host](#working-with-nodes-from-docker-host)
+    * [JSON-RPC access with `geth`](#json-rpc-access-with-geth)
+    * [IPC access with `geth`](#ipc-access-with-geth)
+* [Working with a node from its container](#working-with-a-node-from-its-container)
+    * [Example: Checking a node's `admin.peers`](#example-checking-a-nodes-adminpeers)
+* [Building and using a specific version of Geth](#building-and-using-a-specific-version-of-geth)
+
+
 ## Requirements
 
 + [Docker](https://www.docker.com/get-docker)
@@ -142,3 +155,27 @@ Exit from the container using
 ```commandline
 exit
 ```
+
+## Building and using a specific version of Geth
+
+By default the Ethereal image is using the `master` branch of [go-ethereum](https://github.com/ethereum/go-ethereum). If you want to build from another branch, to use a specific version, you need to follow these steps:
+
+To build a specific branch, run the following command from the `ethereal` folder. This example is using the `release/1.7` branch.
+
+```commandline
+docker build --build-arg CHECKOUT_TARGET="release/1.7" -t chaingang/ethereal:relase-1.7 .
+```
+
+Once the image is built you can use the newly created image when you start Ethereal by using this command.
+
+```commandline
+ETHEREAL_TAG=chaingang/ethereal:relase-1.7 docker-compose up
+```
+
+To verify that the correct version is running you can check the console output. You should see a line indicating the Geth version similar to this example:
+
+```
+Starting peer-to-peer node               instance=Geth/v1.7.3-stable-4bb3c89d/linux-amd64/go1.8.5
+```
+
+
