@@ -67,11 +67,24 @@ services:
     depends_on:
       - bootnode
     environment:
-      - TARGET=miningnode
+      - TARGET=fullnode
       - GENESIS_FILE=${GENESIS_FILE:-genesis.json}
       - NODE_NAME=node-2
       - BOOTNODE_ADDRESS=13.3.7.2
       - BOOTNODE_UDP_PORT=30301
+  test:
+    image: chaingang/ethereal-test:v0.1
+    command: ["node-1/geth.ipc", "node-2/geth.ipc"]
+    volumes:
+      - ${HOST_SHARED_DIR:-shared}:/opt/shared
+      - ${HOST_TEST_DIR:-./}:/opt/tests
+    depends_on:
+      - node-1
+      - node-2
+    environment:
+      - IDENTITY=connectivity-test
+      - POLL_INTERVAL=10
+      - POLL_ATTEMPTS=10
 networks:
   ethnet:
     driver: bridge

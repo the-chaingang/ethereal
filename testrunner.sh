@@ -20,16 +20,18 @@ TEST_SCRIPT=${TEST_SCRIPT}
 
 ATTEMPTS=0
 while true ; do
+	echo "$IDENTITY: Poll $[$ATTEMPTS+1]/$POLL_ATTEMPTS"
+
 	if [ $ATTEMPTS -eq $POLL_ATTEMPTS ] ; then
 		echo "$IDENTITY: Maximum polls exceeded"
 		exit 1
 	elif [ $# -eq 0 ] ; then
-		echo "$IDENTITY: No signals expected"
+		echo "$IDENTITY: No signal expected"
 		break
 	else
 		NUM_SIGNALS=0
 		for SIGNAL in $@ ; do
-			if [ -f "$SIGNAL_DIR/$SIGNAL" ] ; then
+			if [ -e "$SIGNAL_DIR/$SIGNAL" ] ; then
 				NUM_SIGNALS=$[$NUM_SIGNALS+1]
 			fi
 		done
@@ -38,7 +40,7 @@ while true ; do
 			echo "$IDENTITY: All signals detected - $@"
 			break
 		fi
-	
+
 		sleep $POLL_INTERVAL
 		ATTEMPTS=$[$ATTEMPTS+1]
 	fi
