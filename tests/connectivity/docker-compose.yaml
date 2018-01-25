@@ -1,5 +1,7 @@
 # Parameters:
 # -----------
+#   - ETHEREAL_HOME: Path to ethereal home directory, defaults to "../../"
+#
 #   - ETHEREAL_TAG: Specific tag under chaingang/ethereal you wish to deploy, defaults
 #     to "latest"
 #
@@ -7,12 +9,6 @@
 #
 #   - HOST_SHARED_DIR: Local path to directory you would like to use as the ethereal
 #     network shared directory; if not specified, uses a docker volume
-#
-#   - HOST_GENESIS_DIR: Local path to directory containing your genesis file, defaults
-#     to directory from which you are running "docker-compose up"
-#
-#   - GENESIS_FILE: Name of genesis file you wish to use, defaults to genesis.json
-#     (Your local path to the genesis file should be $GENESIS_DIR/$GENESIS_FILE)
 
 version: '2.1'
 services:
@@ -35,7 +31,7 @@ services:
       - ethnet
     volumes:
       - ${HOST_SHARED_DIR:-shared}:/opt/shared
-      - ${HOST_GENESIS_DIR:-./}:/opt/genesis
+      - ${ETHEREAL_HOME:-../../}:/opt/genesis
     networks:
       ethnet:
         ipv4_address: 13.3.7.3
@@ -46,7 +42,7 @@ services:
       - bootnode
     environment:
       - TARGET=fullnode
-      - GENESIS_FILE=${GENESIS_FILE:-genesis.json}
+      - GENESIS_FILE=genesis.json
       - NODE_NAME=node-1
       - BOOTNODE_ADDRESS=13.3.7.2
       - BOOTNODE_UDP_PORT=30301
@@ -57,7 +53,7 @@ services:
       - ethnet
     volumes:
       - ${HOST_SHARED_DIR:-shared}:/opt/shared
-      - ${HOST_GENESIS_DIR:-./}:/opt/genesis
+      - ${ETHEREAL_HOME:-../../}:/opt/genesis
     networks:
       ethnet:
         ipv4_address: 13.3.7.4
@@ -68,16 +64,18 @@ services:
       - bootnode
     environment:
       - TARGET=fullnode
-      - GENESIS_FILE=${GENESIS_FILE:-genesis.json}
+      - GENESIS_FILE=genesis.json
       - NODE_NAME=node-2
       - BOOTNODE_ADDRESS=13.3.7.2
       - BOOTNODE_UDP_PORT=30301
   test:
-    image: chaingang/ethereal-test:v0.1
+    build:
+      context: ${ETHEREAL_HOME:-../../}
+      dockerfile: ${ETHEREAL_HOME}/Dockerfile.test
     command: ["node-1/geth.ipc", "node-2/geth.ipc"]
     volumes:
       - ${HOST_SHARED_DIR:-shared}:/opt/shared
-      - ${HOST_TEST_DIR:-./}:/opt/tests
+      - ./:/opt/tests
     depends_on:
       - node-1
       - node-2
