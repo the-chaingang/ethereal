@@ -1,6 +1,9 @@
 #!/bin/bash
 
-set -eu -o pipefail
+# Leave some time for HTTP endpoints to open
+sleep 1
+
+set -eux -o pipefail
 
 # Assert variables are defined (thanks to "set -u")
 RPC_URL_1=$RPC_URL_1
