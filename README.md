@@ -15,6 +15,7 @@ Dockerized Ethereum testnets
 * [Working with a node from its container](#working-with-a-node-from-its-container)
     * [Example: Checking a node's `admin.peers`](#example-checking-a-nodes-adminpeers)
 * [Building and using a specific version of Geth](#building-and-using-a-specific-version-of-geth)
+* [Tests](#tests)
 
 
 ## Requirements
@@ -179,3 +180,8 @@ Starting peer-to-peer node               instance=Geth/v1.7.3-stable-4bb3c89d/li
 ```
 
 
+## Tests
+
+The `ethereal` unit tests can be found in the [tests/](./tests) directory. Each suite of tests is contained
+in a separate subdirectory of `tests/`. The [testing README](./tests/README.md) provides detailed
+instructions for how to run these tests.
