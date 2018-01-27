@@ -28,3 +28,6 @@ image from our DockerHub page --
 
 - [connectivity](./connectivity) - Tests connectivity between two full nodes connected through a
 bootnode.
+
+- [rpc-apis](./rpc-apis) - Tests that RPC interface on `geth` nodes can be configured to expose
+different management APIs.
