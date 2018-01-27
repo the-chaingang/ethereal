@@ -48,7 +48,7 @@ services:
       - BOOTNODE_UDP_PORT=30301
   node-2:
     image: chaingang/ethereal:${ETHEREAL_TAG:-latest}
-    command: ["--rpc", "--networkid", "${NETWORK_ID:-158972}"]
+    command: ["--rpc", "--rpcapi", "db,eth,net,web3,admin", "--networkid", "${NETWORK_ID:-158972}"]
     networks:
       - ethnet
     volumes:
@@ -80,9 +80,13 @@ services:
       - node-1
       - node-2
     environment:
-      - IDENTITY=connectivity-test
+      - IDENTITY=rpc-api-test
       - POLL_INTERVAL=10
       - POLL_ATTEMPTS=10
+      - RPC_URL_1=http://13.3.7.3:8545
+      - RPC_URL_2=http://13.3.7.4:8545
+    networks:
+      ethnet:
 networks:
   ethnet:
     driver: bridge
