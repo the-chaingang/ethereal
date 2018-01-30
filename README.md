@@ -164,7 +164,7 @@ By default the Ethereal image is using the `master` branch of [go-ethereum](http
 To build a specific branch, run the following command from the `ethereal` folder. This example is using the `release/1.7` branch.
 
 ```commandline
-docker build --build-arg CHECKOUT_TARGET="release/1.7" -t chaingang/ethereal:relase-1.7 .
+docker build --build-arg CHECKOUT_TARGET="release/1.7" -t chaingang/ethereal:release-1.7 .
 ```
 
 Once the image is built you can use the newly created image when you start Ethereal by using this command.
